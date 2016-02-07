@@ -32,6 +32,7 @@ class SettingsViewController: UITableViewController {
     @IBAction func learnClefChanged(sender: UISegmentedControl) {
         
         Notes.changeLearnClef()
+        Notes.updateSettingChange()
     }
     
     @IBAction func practiceClefChanged(sender: UISegmentedControl) {
@@ -52,18 +53,20 @@ class SettingsViewController: UITableViewController {
             break;
             
         }
+        Notes.updateSettingChange()
     }
     
     @IBAction func practiceWithChanged(sender: UISegmentedControl) {
         
         Notes.letterPractice = !Notes.letterPractice
         practiceVC.switchPractice()
+        Notes.updateSettingChange()
     }
     
     @IBAction func practiceTimeChanged(sender: UISegmentedControl) {
         
         Notes.practiceTime = (Double(sender.selectedSegmentIndex) + 1)*20
-        print("practice time", Notes.practiceTime)
+        Notes.updateSettingChange()
     }
     
     

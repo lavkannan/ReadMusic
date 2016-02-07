@@ -19,33 +19,70 @@ struct Notes {
     static var practicing = false
     static var letterPractice = true
     static var practiceTime = 20.0
+    static var statIndex = 0
     
-    static var totalCorrect = 0.0
-    static var totalMistakes = 0.0
-    static var totalCorrectPiano = 0.0
-    static var totalMistakesPiano = 0.0
+    static var totalCorrect = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    static var totalMistakes = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     
-    static var bestRuns = [0, 0, 0, 0, 0, 0]
-    static var mostPerMin = 0.0
-    static var accuracy = 0.0
-    static var mostPerMinPiano = 0.0
-    static var accuracyPiano = 0.0
+    static var bestRuns = [[0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0]]
+    static var mostPerMin = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    static var accuracy = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     
     static var stats = NSUserDefaults.standardUserDefaults()
     
     static func retrieveStats() {
         
-        totalCorrect = stats.doubleForKey("totalCorrect")
-        totalMistakes = stats.doubleForKey("totalMistakes")
-        bestRuns[0] = stats.integerForKey("best20")
-        bestRuns[1] = stats.integerForKey("best40")
-        bestRuns[2] = stats.integerForKey("best60")
-        bestRuns[3] = stats.integerForKey("best20Piano")
-        bestRuns[4] = stats.integerForKey("best40Piano")
-        bestRuns[5] = stats.integerForKey("best60Piano")
-        mostPerMin = stats.doubleForKey("mostPerMin")
-        accuracy = stats.doubleForKey("accuracy")
+        totalCorrect[0] = stats.doubleForKey("totalCorrectLettersTreble")
+        totalCorrect[1] = stats.doubleForKey("totalCorrectLettersBase")
+        totalCorrect[2] = stats.doubleForKey("totalCorrectLettersBoth")
+        totalCorrect[3] = stats.doubleForKey("totalCorrectPianoTreble")
+        totalCorrect[4] = stats.doubleForKey("totalCorrectPianoBase")
+        totalCorrect[5] = stats.doubleForKey("totalCorrectPianoBoth")
         
+        totalMistakes[0] = stats.doubleForKey("totalMistakesLettersTreble")
+        totalMistakes[1] = stats.doubleForKey("totalMistakesLettersBase")
+        totalMistakes[2] = stats.doubleForKey("totalMistakesLettersBoth")
+        totalMistakes[3] = stats.doubleForKey("totalMistakesPianoTreble")
+        totalMistakes[4] = stats.doubleForKey("totalMistakesPianoBase")
+        totalMistakes[5] = stats.doubleForKey("totalMistakesPianoBoth")
+        
+        bestRuns[0][0] = stats.integerForKey("best20LettersTreble")
+        bestRuns[0][1] = stats.integerForKey("best40LettersTreble")
+        bestRuns[0][2] = stats.integerForKey("best60LettersTreble")
+        
+        bestRuns[1][0] = stats.integerForKey("best20LettersBase")
+        bestRuns[1][1] = stats.integerForKey("best40LettersBase")
+        bestRuns[1][2] = stats.integerForKey("best60LettersBase")
+        
+        bestRuns[2][0] = stats.integerForKey("best20LettersBoth")
+        bestRuns[2][1] = stats.integerForKey("best40LettersBoth")
+        bestRuns[2][2] = stats.integerForKey("best60LettersBoth")
+        
+        bestRuns[3][0] = stats.integerForKey("best20PianoTreble")
+        bestRuns[3][1] = stats.integerForKey("best40PianoTreble")
+        bestRuns[3][2] = stats.integerForKey("best60PianoTreble")
+        
+        bestRuns[4][0] = stats.integerForKey("best20PianoBase")
+        bestRuns[4][1] = stats.integerForKey("best40PianoBase")
+        bestRuns[4][2] = stats.integerForKey("best60PianoBase")
+        
+        bestRuns[5][0] = stats.integerForKey("best20PianoBoth")
+        bestRuns[5][1] = stats.integerForKey("best40PianoBoth")
+        bestRuns[5][2] = stats.integerForKey("best60PianoBoth")
+        
+        mostPerMin[0] = stats.doubleForKey("mostPerMinLettersTreble")
+        mostPerMin[1] = stats.doubleForKey("mostPerMinLettersBase")
+        mostPerMin[2] = stats.doubleForKey("mostPerMinLettersBoth")
+        mostPerMin[3] = stats.doubleForKey("mostPerMinPianoTreble")
+        mostPerMin[4] = stats.doubleForKey("mostPerMinPianoBase")
+        mostPerMin[5] = stats.doubleForKey("mostPerMinPianoBoth")
+        
+        accuracy[0] = stats.doubleForKey("accuracyLettersTreble")
+        accuracy[1] = stats.doubleForKey("accuracyLettersBase")
+        accuracy[2] = stats.doubleForKey("accuracyLettersBoth")
+        accuracy[3] = stats.doubleForKey("accuracyPianoTreble")
+        accuracy[4] = stats.doubleForKey("accuracyPianoBase")
+        accuracy[5] = stats.doubleForKey("accuracyPianoBoth")
     }
     
     static func resetStats() {
@@ -55,6 +92,26 @@ struct Notes {
         }
         retrieveStats()
     }
+    
+    static func updateSettingChange() {
+        if(letterPractice) {
+            switch practiceClef {
+                
+            case Clef.Treble: statIndex = 0
+            case Clef.Base: statIndex = 1
+            case Clef.Both: statIndex = 2
+            }
+            
+        } else {
+            switch practiceClef {
+                
+            case Clef.Treble: statIndex = 3
+            case Clef.Base: statIndex = 4
+            case Clef.Both: statIndex = 5
+            }
+        }
+    }
+    
     
     static func getNote(tag: Int) -> String {
         
@@ -126,68 +183,60 @@ struct Notes {
     
     static func incrementTotalCorrect() {
         
-        if(letterPractice) {
-            totalCorrect++
-            stats.setDouble(totalCorrect, forKey: "totalCorrect")
+        var num = 0.0
+        num = ++totalCorrect[statIndex]
+        var key = ""
         
-        } else {
-            totalCorrectPiano++
-            stats.setDouble(totalCorrect, forKey: "totalCorrectPiano")
-            
-        }
+        if (letterPractice) { key = "totalCorrectLetters" }
+        else { key = "totalCorrectPiano" }
+        
+        updateGuesses(num, key: (key+practiceClef.rawValue) )
     }
     
     static func incrementTotalMistakes() {
         
-        if(letterPractice) {
-            totalMistakes++
-            stats.setDouble(totalCorrect, forKey: "totalMistakes")
-            
-        } else {
-            totalMistakesPiano++
-            stats.setDouble(totalCorrect, forKey: "totalMistakesPiano")
-            
-        }
+        var num = 0.0
+        num = ++totalMistakes[statIndex]
+        var key = ""
+        
+        if (letterPractice) { key = "totalMistakesLetters" }
+        else { key = "totalMistakesPiano" }
+        
+        updateGuesses(num, key: (key+practiceClef.rawValue) )
+    }
+    
+    static func updateGuesses(n: Double, key: String) {
+        stats.setDouble(n, forKey: key)
     }
     
     static func updateBestRun(numCorrect: Int) {
         
-        let bestRunIndex = Int(practiceTime)/20 - 1 + (letterPractice ? 0 : 3)
+        let bestRunIndex = Int(practiceTime)/20 - 1
+        let practiceType = (letterPractice ? "Letters" : "Piano") + practiceClef.rawValue
         
-        if(numCorrect > bestRuns[bestRunIndex]) {
-            bestRuns[bestRunIndex] = numCorrect
-            let key = "best"+String(Int(practiceTime)) + (letterPractice ? "" : "Piano")
+        if(numCorrect > bestRuns[statIndex][bestRunIndex]) {
+            bestRuns[statIndex][bestRunIndex] = numCorrect
+            let key = "best"+String(Int(practiceTime)) + practiceType
             stats.setInteger(numCorrect, forKey: key)
         }
         
-        var mult = 3.0 - Double(bestRunIndex % 3)
-        if(bestRunIndex == 1 || bestRunIndex == 4) {
+        var mult = 3.0 - Double(bestRunIndex)
+        if(bestRunIndex == 1) {
             mult = 1.5
         }
         
         let perMin = Double(numCorrect) * mult
         
-        if (letterPractice) {
-            if (perMin > mostPerMin) {
-                mostPerMin = perMin
-                stats.setDouble(perMin, forKey: "mostPerMin")
-            }
-        } else {
-            if (perMin > mostPerMinPiano) {
-                mostPerMinPiano = perMin
-                stats.setDouble(perMin, forKey: "mostPerMinPiano")
-            }
+        if (perMin > mostPerMin[statIndex]) {
+            mostPerMin[statIndex] = perMin
+            stats.setDouble(perMin, forKey: "mostPerMin" + practiceType)
         }
         
-        let numCorrect = letterPractice ? totalCorrect : totalCorrectPiano
-        let totalGuesses = numCorrect + (letterPractice ? totalMistakes : totalMistakesPiano)
+        let numCorrect = totalCorrect[statIndex]
+        let totalGuesses = numCorrect + totalMistakes[statIndex]
         let percent = (totalGuesses == 0 ? 0 : numCorrect/totalGuesses*100)
-        if (letterPractice) {
-            accuracy = round(percent*100)/100.0
-        } else {
-            accuracyPiano = round(percent*100)/100.0
-        }
-        stats.setDouble(accuracy, forKey: (letterPractice ? "accuracy" : "accuracyPiano") )
+        accuracy[statIndex] = round(percent*100)/100.0
+        stats.setDouble(accuracy[statIndex], forKey: "accuracy" + practiceType )
     }
     
     enum Clef : String {
