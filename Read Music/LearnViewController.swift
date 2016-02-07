@@ -32,6 +32,7 @@ class LearnViewController: UIViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         
         staffImageView.image = UIImage(named: Notes.learnClef.rawValue.lowercaseString + "-clef-music-staff.png")
         resetDisplayedNote(staffImageView)

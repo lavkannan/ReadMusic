@@ -36,11 +36,20 @@ class PracticeViewController: UIViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
         stopTimer()
         beginButton.hidden = false
-        Notes.practicing = false
+        Notes.practicing = true
         guessResultLabel.text = ""
         timeLabel.text = ""
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        stopTimer()
+        Notes.practicing = false
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -51,14 +60,6 @@ class PracticeViewController: UIViewController {
         }
     }
     
-//    @IBAction func changeClef(sender: UIButton) {
-//        
-//        sender.setTitle(Notes.practiceClef.rawValue + " Clef", forState: UIControlState.Normal)
-//        Notes.changePracticeClef()
-//        displayRandImage()
-//    }
-    
-    //implement both clefs
     @IBAction func startButtonPressed(sender: UIButton) {
         
         startTimer()
@@ -80,7 +81,7 @@ class PracticeViewController: UIViewController {
     
     @IBAction func processGuess(sender: UIButton) {
         
-        if(beginButton.hidden == false || Notes.practicing == false) {
+        if(Notes.practicing == false || beginButton.hidden == false) {
             return
         }
         
