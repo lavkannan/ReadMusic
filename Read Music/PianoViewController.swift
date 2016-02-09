@@ -13,8 +13,6 @@ class PianoViewController: UIViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var contentView: UIView!
-//    var scrollView = UIScrollView()
-//    var contentView = UIView()
     
     static var pianoSounds = [String: AVAudioPlayer]()
     var lastButtonPressed: UIButton!
@@ -27,20 +25,7 @@ class PianoViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         let pianoWidth = 30*45
-//        view.frame = CGRect(x: 0, y: 0, width: pianoWidth, height: 111)
-//        view.backgroundColor = UIColor.redColor()
-//        
-//        scrollView.frame = view.frame
         scrollView.contentSize.width = CGFloat(pianoWidth) //1197
-//        scrollView.showsVerticalScrollIndicator = false
-//        scrollView.pagingEnabled = true
-//        scrollView.directionalLockEnabled = true
-//        scrollView.multipleTouchEnabled = true
-////        scrollView.backgroundColor = UIColor.redColor()
-//        view.addSubview(scrollView)
-//        
-//        contentView.frame = view.frame
-//        scrollView.addSubview(contentView)
         
         let keysStack = UIStackView(frame: contentView.bounds)
         contentView.addSubview(keysStack)
@@ -69,8 +54,6 @@ class PianoViewController: UIViewController {
                 blackPianoKey.setBackgroundImage(UIImage(named: "piano-key-black-background"), forState: .Normal)
                 blackPianoKey.setTitle(nextNote + "#", forState: .Normal)
                 blackPianoKey.tag = n*10
-//                blackPianoKey.titleLabel?.minimumScaleFactor = 0.4
-//                blackPianoKey.titleLabel?.adjustsFontSizeToFitWidth = true
                 blackPianoKey.addTarget(self, action: "pianoKeyPressed:", forControlEvents: .TouchUpInside)
                 scrollView.addSubview(blackPianoKey)
             }

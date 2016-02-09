@@ -88,17 +88,6 @@ class LearnViewController: UIViewController {
         }
     }
     
-    
-//    @IBAction func changeClef(sender: AnyObject) {
-//        
-//        sender.setTitle(Notes.learnClef.rawValue + " Clef", forState: UIControlState.Normal)
-//        Notes.changeLearnClef()
-//        staffImageView.image = UIImage(named: Notes.learnClef.rawValue.lowercaseString + "-clef-music-staff.png")
-//        
-//        resetDisplayedNote(staffImageView)
-//    }
-    
-    
     /*
     // MARK: - Navigation
     

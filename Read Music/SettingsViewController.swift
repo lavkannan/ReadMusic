@@ -38,7 +38,6 @@ class SettingsViewController: UITableViewController {
             Notes.practiceClef = Notes.Clef.Treble
             
         case 1:
-            print("Setting base...")
             Notes.practiceClef = Notes.Clef.Base
         
         case 2:

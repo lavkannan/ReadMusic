@@ -76,7 +76,6 @@ class PracticeViewController: UIViewController {
         
         let name = Notes.getPracticeRandom() + "-note-" + Notes.randClef.rawValue.lowercaseString
         randImageView.image = UIImage(named: name)
-//        startTimer()
     }
     
     @IBAction func processGuess(sender: UIButton) {
@@ -88,13 +87,9 @@ class PracticeViewController: UIViewController {
         if(Notes.checkGuess(sender.currentTitle!)) {
             
             guessResultLabel.text = "Correct!"
-//            stopTimer()
-//            updateBestTime()
             numCorrect++
             Notes.incrementTotalCorrect()
             
-//            beginButton.hidden = false
-//            Notes.practicing = false
             displayRandImage()
             
         } else {
@@ -128,7 +123,6 @@ class PracticeViewController: UIViewController {
     func updateTime() {
         let currentTime = NSDate.timeIntervalSinceReferenceDate()
         let elapsedTime: NSTimeInterval = currentTime - startTime
-//        lastTime = elapsedTime
         
         let labelTime = Notes.practiceTime - elapsedTime
         
@@ -176,16 +170,7 @@ class PracticeViewController: UIViewController {
     func switchPractice() {
         stackView.hidden = !stackView.hidden
         containerView.hidden = !containerView.hidden
-//        Notes.letterPractice = !Notes.letterPractice
         Notes.practicing = false
-        
-//        if(Notes.letterPractice) {
-//            sender.setTitle("Practice With Piano", forState: .Normal)
-//            pianoVC.resetKeyPressed()
-//            
-//        } else {
-//            sender.setTitle("Practice With Letters", forState: .Normal)
-//        }
         stopTimer()
         
         guessResultLabel.text = ""
